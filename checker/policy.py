@@ -3,10 +3,9 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Literal, Optional
-
+from typing import Literal
 
 PolicySeverity = Literal["critical", "warning", "info", "pass"]
 
@@ -56,7 +55,7 @@ _NIST_RULES: list[dict] = [
         "severity": "critical",
         "description": "Minimum password length must be at least 8 characters",
         "reference": "NIST SP 800-63B §5.1.1",
-        "recommendation": f"Set min_length to at least 8. NIST recommends 15+ for memorized secrets.",
+        "recommendation": "Set min_length to at least 8. NIST recommends 15+ for memorized secrets.",
         "penalty": 35,
     },
     {

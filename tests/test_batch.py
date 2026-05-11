@@ -1,9 +1,10 @@
 """Tests for batch evaluation."""
 
-import pytest
 from unittest.mock import patch
 
-from checker.batch import evaluate_batch, _passes_policy, _length_bin
+import pytest
+
+from checker.batch import _length_bin, _passes_policy, evaluate_batch
 from checker.policy import PolicyConfig
 
 

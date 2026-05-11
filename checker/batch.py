@@ -2,12 +2,10 @@
 
 from __future__ import annotations
 
-import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Optional
 
-from .evaluator import evaluate_password, PasswordEvaluation
+from .evaluator import PasswordEvaluation, evaluate_password
 from .policy import PolicyConfig
 
 
@@ -38,7 +36,7 @@ class BatchResult:
     # Policy compliance (if policy provided)
     policy_pass: int = 0
     policy_fail: int = 0
-    policy_name: Optional[str] = None
+    policy_name: str | None = None
 
     # Top pattern findings
     pattern_hits: dict[str, int] = field(default_factory=dict)
@@ -85,7 +83,7 @@ def _length_bin(length: int) -> str:
 def evaluate_batch(
     path: Path,
     check_hibp_api: bool = False,   # Default off for batch — too slow / noisy
-    policy: Optional[PolicyConfig] = None,
+    policy: PolicyConfig | None = None,
     progress_callback=None,
 ) -> BatchResult:
     """

@@ -1,10 +1,11 @@
 """Tests for policy loading and NIST compliance evaluation."""
 
 import json
-import pytest
 from pathlib import Path
 
-from checker.policy import load_policy, evaluate_policy, PolicyConfig
+import pytest
+
+from checker.policy import evaluate_policy, load_policy
 
 
 def _write_policy(tmp_path: Path, rules: dict, name: str = "Test Policy") -> Path:

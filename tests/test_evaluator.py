@@ -1,9 +1,8 @@
 """Tests for the core password evaluator."""
 
-import pytest
 from unittest.mock import patch
 
-from checker.evaluator import evaluate_password, PasswordEvaluation, _score_password, _rating
+from checker.evaluator import PasswordEvaluation, _rating, _score_password, evaluate_password
 
 
 class TestEvaluatePassword:

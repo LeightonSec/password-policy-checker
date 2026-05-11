@@ -4,19 +4,17 @@ from __future__ import annotations
 
 import json
 from datetime import datetime, timezone
-from dataclasses import asdict
 from pathlib import Path
-from typing import Optional
 
+from rich import box
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
-from rich import box
 from rich.text import Text
 
-from .evaluator import PasswordEvaluation
-from .policy import PolicyEvaluation, PolicySeverity
 from .batch import BatchResult
+from .evaluator import PasswordEvaluation
+from .policy import PolicyEvaluation
 
 console = Console()
 err_console = Console(stderr=True)
@@ -374,8 +372,8 @@ def export_password_markdown(result: PasswordEvaluation, path: Path) -> None:
         f"\n_Generated: {_now_iso()}_\n",
         f"## Overall: {result.rating} ({result.score}/100)\n",
         "## Composition\n",
-        f"| Property | Value |",
-        f"|---|---|",
+        "| Property | Value |",
+        "|---|---|",
         f"| Length | {result.password_length} characters |",
         f"| Entropy | {result.entropy_bits:.1f} bits |",
         f"| Lowercase | {'✓' if result.has_lowercase else '✗'} |",
@@ -385,9 +383,9 @@ def export_password_markdown(result: PasswordEvaluation, path: Path) -> None:
         f"| Unicode | {'✓' if result.has_unicode else '✗'} |",
         f"| Common password | {'⚠ Yes' if result.is_common else 'No'} |",
         f"| Breached (HIBP) | {'⚠ Yes — ' + str(result.breach_count) + ' occurrences' if result.is_breached else ('Not checked' if not result.hibp_checked else 'No')} |",
-        f"\n## Estimated Crack Times\n",
-        f"| Scenario | Time |",
-        f"|---|---|",
+        "\n## Estimated Crack Times\n",
+        "| Scenario | Time |",
+        "|---|---|",
         f"| Online (throttled) | {ct.online_throttled} |",
         f"| Online (no rate limit) | {ct.online_unthrottled} |",
         f"| Offline slow hash (bcrypt) | {ct.offline_slow} |",
@@ -401,8 +399,8 @@ def export_password_markdown(result: PasswordEvaluation, path: Path) -> None:
     lines += ["\n## Recommendations\n"]
     for r in result.recommendations:
         lines.append(f"- {r}")
-    lines.append(f"\n---\n_[NIST SP 800-63B](https://pages.nist.gov/800-63-3/sp800-63b.html) | "
-                 f"[NCSC Password Guidance](https://www.ncsc.gov.uk/collection/passwords)_")
+    lines.append("\n---\n_[NIST SP 800-63B](https://pages.nist.gov/800-63-3/sp800-63b.html) | "
+                 "[NCSC Password Guidance](https://www.ncsc.gov.uk/collection/passwords)_")
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     console.print(f"[green]Markdown exported → {path}[/green]")
 
@@ -441,6 +439,6 @@ def export_batch_markdown(result: BatchResult, path: Path) -> None:
         lines += ["\n## Common Patterns\n", "| Pattern | Occurrences |", "|---|---|"]
         for pattern, count in sorted(result.pattern_hits.items(), key=lambda x: -x[1]):
             lines.append(f"| {pattern} | {count} |")
-    lines.append(f"\n---\n_[NIST SP 800-63B](https://pages.nist.gov/800-63-3/sp800-63b.html)_")
+    lines.append("\n---\n_[NIST SP 800-63B](https://pages.nist.gov/800-63-3/sp800-63b.html)_")
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     console.print(f"[green]Markdown exported → {path}[/green]")

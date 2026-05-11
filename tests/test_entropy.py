@@ -1,7 +1,6 @@
 """Tests for entropy calculation and crack time estimation."""
 
-import pytest
-from checker.entropy import calculate_entropy, estimate_crack_times, _charset_size
+from checker.entropy import _charset_size, calculate_entropy, estimate_crack_times
 
 
 class TestCharsetSize:

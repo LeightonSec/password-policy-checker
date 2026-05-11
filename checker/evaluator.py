@@ -4,11 +4,10 @@ from __future__ import annotations
 
 import importlib.resources
 from dataclasses import dataclass, field
-from typing import Optional
 
-from .entropy import calculate_entropy, estimate_crack_times, CrackTimes
-from .patterns import detect_all_patterns
+from .entropy import CrackTimes, calculate_entropy, estimate_crack_times
 from .hibp import check_hibp
+from .patterns import detect_all_patterns
 
 
 @dataclass
@@ -35,7 +34,7 @@ class PasswordEvaluation:
     is_breached: bool
     breach_count: int
     hibp_checked: bool
-    hibp_error: Optional[str]
+    hibp_error: str | None
 
     # Pattern findings
     patterns: list[str]

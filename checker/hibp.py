@@ -7,16 +7,14 @@ The full password and full hash never leave this machine.
 from __future__ import annotations
 
 import hashlib
-from typing import Optional
 
 import httpx
-
 
 _HIBP_URL = "https://api.pwnedpasswords.com/range/{prefix}"
 _TIMEOUT_SECONDS = 8.0
 
 
-def check_hibp(password: str) -> tuple[bool, int, Optional[str]]:
+def check_hibp(password: str) -> tuple[bool, int, str | None]:
     """
     Check whether a password appears in the HIBP breach database.
 

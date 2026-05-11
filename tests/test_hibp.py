@@ -3,8 +3,6 @@
 import hashlib
 from unittest.mock import MagicMock, patch
 
-import pytest
-
 from checker.hibp import check_hibp
 
 
@@ -14,9 +12,9 @@ def _make_hibp_response(password: str, count: int = 5) -> str:
     suffix = sha1[5:]
     # Build a response with the target suffix plus some decoys
     lines = [
-        f"AAAAABBBBBCCCCCDDDDDEEEEE:0",   # padding decoy
+        "AAAAABBBBBCCCCCDDDDDEEEEE:0",   # padding decoy
         f"{suffix}:{count}",
-        f"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:1",
+        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:1",
     ]
     return "\r\n".join(lines)
 
@@ -24,7 +22,7 @@ def _make_hibp_response(password: str, count: int = 5) -> str:
 def _make_clean_response(password: str) -> str:
     """Build a fake HIBP response that does NOT include the given password."""
     sha1 = hashlib.sha1(password.encode()).hexdigest().upper()
-    suffix = sha1[5:]
+    sha1[5:]
     # Return a response with different suffixes
     return "AAAAABBBBBCCCCCDDDDDEEEEE:3\r\nFFFFFBBBBBCCCCCDDDDDEEEEE:7"
 

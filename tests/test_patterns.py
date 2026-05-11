@@ -1,13 +1,12 @@
 """Tests for pattern detection."""
 
-import pytest
 from checker.patterns import (
+    detect_all_patterns,
+    detect_date_pattern,
     detect_keyboard_walk,
+    detect_leet_speak,
     detect_repeated_chars,
     detect_sequential_chars,
-    detect_date_pattern,
-    detect_leet_speak,
-    detect_all_patterns,
 )
 
 

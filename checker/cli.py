@@ -5,24 +5,23 @@ from __future__ import annotations
 import getpass
 import sys
 from pathlib import Path
-from typing import Annotated, Optional
+from typing import Annotated
 
 import typer
-from rich.console import Console
 
-from .evaluator import evaluate_password
-from .policy import load_policy, evaluate_policy
 from .batch import evaluate_batch
+from .evaluator import evaluate_password
+from .policy import evaluate_policy, load_policy
 from .reporter import (
     console,
-    print_password_evaluation,
-    print_policy_evaluation,
-    print_batch_results,
+    export_batch_json,
+    export_batch_markdown,
     export_password_json,
     export_password_markdown,
     export_policy_json,
-    export_batch_json,
-    export_batch_markdown,
+    print_batch_results,
+    print_password_evaluation,
+    print_policy_evaluation,
 )
 
 app = typer.Typer(
@@ -42,20 +41,20 @@ app = typer.Typer(
 @app.command()
 def check(
     password: Annotated[
-        Optional[str],
+        str | None,
         typer.Argument(help="Password to evaluate. Omit to be prompted securely (recommended)."),
     ] = None,
     no_hibp: Annotated[bool, typer.Option("--no-hibp", help="Skip HaveIBeenPwned breach check.")] = False,
     policy_file: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option("--policy", "-p", help="JSON policy file to evaluate the password against."),
     ] = None,
     output: Annotated[
-        Optional[str],
+        str | None,
         typer.Option("--output", "-o", help="Export format: 'json' or 'markdown'."),
     ] = None,
     export_path: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option("--export", "-e", help="File path for export output."),
     ] = None,
 ) -> None:
@@ -113,11 +112,11 @@ def check(
 def policy(
     policy_file: Annotated[Path, typer.Argument(help="Path to the JSON policy configuration file.")],
     output: Annotated[
-        Optional[str],
+        str | None,
         typer.Option("--output", "-o", help="Export format: 'json'."),
     ] = None,
     export_path: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option("--export", "-e", help="File path for export output."),
     ] = None,
 ) -> None:
@@ -140,7 +139,7 @@ def policy(
         if output.lower() == "json":
             export_policy_json(result, dest)
         else:
-            console.print(f"[red]Policy export currently supports 'json' only.[/red]")
+            console.print("[red]Policy export currently supports 'json' only.[/red]")
             raise typer.Exit(1)
 
     # Exit with non-zero code if policy has critical violations
@@ -154,7 +153,7 @@ def policy(
 def batch(
     passwords_file: Annotated[Path, typer.Argument(help="File containing one password per line.")],
     policy_file: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option("--policy", "-p", help="Optional JSON policy file for compliance checking."),
     ] = None,
     hibp: Annotated[
@@ -162,11 +161,11 @@ def batch(
         typer.Option("--hibp/--no-hibp", help="Enable HIBP breach checks (slow for large sets, rate-limited)."),
     ] = False,
     output: Annotated[
-        Optional[str],
+        str | None,
         typer.Option("--output", "-o", help="Export format: 'json' or 'markdown'."),
     ] = None,
     export_path: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option("--export", "-e", help="File path for export output."),
     ] = None,
 ) -> None:
