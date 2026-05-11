@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "password-policy-checker"
+version = "1.0.0"
+description = "Evaluate passwords and organisational password policies against NIST SP 800-63B, NCSC, and common security standards"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+authors = [{ name = "LeightonSec" }]
+keywords = ["security", "password", "nist", "policy", "hibp", "cybersecurity"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Information Technology",
+    "Topic :: Security",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "typer>=0.12.0",
+    "rich>=13.0.0",
+    "httpx>=0.27.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.scripts]
+password-policy-checker = "checker.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/LeightonSec/password-policy-checker"
+Issues = "https://github.com/LeightonSec/password-policy-checker/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["checker*"]
+
+[tool.setuptools.package-data]
+"checker.data" = ["*.txt"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=checker --cov-report=term-missing --cov-report=xml"
+
+[tool.coverage.run]
+omit = ["tests/*", "checker/data/*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "N", "UP"]
+ignore = ["E501"]

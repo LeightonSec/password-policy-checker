@@ -1,0 +1,20 @@
+{
+  "name": "Legacy Corporate Policy",
+  "version": "1.0",
+  "description": "A typical legacy corporate policy with mandatory complexity rules and periodic rotation. Provided as an example of what NOT to do — run 'password-policy-checker policy' to see the NIST violations.",
+  "rules": {
+    "min_length": 8,
+    "max_length": 16,
+    "require_uppercase": true,
+    "require_lowercase": true,
+    "require_digits": true,
+    "require_special": true,
+    "max_consecutive_repeated": 3,
+    "expiry_days": 90,
+    "check_hibp": false,
+    "check_common_passwords": false,
+    "min_entropy_bits": 0,
+    "allow_unicode": false,
+    "allow_hints": true
+  }
+}

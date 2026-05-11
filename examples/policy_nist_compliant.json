@@ -1,0 +1,20 @@
+{
+  "name": "NIST SP 800-63B Compliant",
+  "version": "1.0",
+  "description": "A policy aligned with NIST SP 800-63B recommendations. Prioritises length and breach checking over complexity mandates.",
+  "rules": {
+    "min_length": 15,
+    "max_length": 128,
+    "require_uppercase": false,
+    "require_lowercase": false,
+    "require_digits": false,
+    "require_special": false,
+    "max_consecutive_repeated": 0,
+    "expiry_days": 0,
+    "check_hibp": true,
+    "check_common_passwords": true,
+    "min_entropy_bits": 40,
+    "allow_unicode": true,
+    "allow_hints": false
+  }
+}
