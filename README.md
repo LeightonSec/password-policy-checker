@@ -1,10 +1,12 @@
-# password-policy-checker
+# password-policy-checker — v1.0.0
 
 A Python CLI tool for evaluating passwords and organisational password policies against **NIST SP 800-63B**, **NCSC Password Guidance**, and common security best practices.
 
 [![CI](https://github.com/LeightonSec/password-policy-checker/actions/workflows/ci.yml/badge.svg)](https://github.com/LeightonSec/password-policy-checker/actions)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+> **Ethical use:** This tool is intended for security assessment, policy review, and education. Only use it against passwords and policies you have authorisation to test. Do not audit credentials without explicit permission from the account holder or system owner.
 
 ---
 
@@ -242,6 +244,29 @@ password-policy-checker/
 ├── .github/workflows/ci.yml
 └── pyproject.toml
 ```
+
+---
+
+## Scope
+
+This tool evaluates passwords and organisational password policies. It is **not** a replacement for an Identity Provider (IdP), Privileged Access Management (PAM) system, or production authentication stack.
+
+It is not designed for:
+
+- Real-time authentication flows or login gatekeeping
+- Storing or managing credentials at rest
+- Replacing a dedicated secrets manager or vault
+- High-volume automated credential auditing at scale
+
+---
+
+## Limitations
+
+- **Entropy estimation is heuristic.** The Shannon entropy calculation assumes uniform character-set distribution. It does not account for Markov chains, language patterns, or targeted dictionary attacks. Crack time estimates are illustrative, not cryptographically precise.
+- **Common password list is not exhaustive.** The built-in list covers ~600 frequently-seen passwords. Many weak passwords will not match it. For thorough coverage, replace it with a larger wordlist (see *Extending the Common Password List* above).
+- **HIBP check requires internet access.** The breach-database check calls `api.pwnedpasswords.com`. It fails gracefully on network error, but results will be incomplete offline.
+- **Batch mode disables HIBP by default.** HIBP checking is off in batch mode to avoid rate-limiting. Opt in with `--hibp`, and be aware of API fair-use limits for large files.
+- **Memory clearing is best-effort.** Plaintext passwords are dereferenced immediately after evaluation, but Python's garbage collector is non-deterministic. The password may remain in memory longer than intended. Do not use this tool where cryptographic memory-zeroing is a hard requirement.
 
 ---
 

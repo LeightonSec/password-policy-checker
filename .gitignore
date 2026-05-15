@@ -1,5 +1,6 @@
 # Python
 __pycache__/
+*.pyc
 *.py[cod]
 *.pyo
 *.pyd
@@ -47,6 +48,9 @@ htmlcov/
 
 # macOS
 .DS_Store
+
+# Node
+node_modules/
 
 # Reports (generated output — not source)
 *-report.json
