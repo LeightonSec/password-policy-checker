@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import importlib.resources
+import importlib.resources  # nosemgrep: python.lang.compatibility.python37.python37-compatibility-importlib2 — requires-python = ">=3.10" in pyproject.toml
 from dataclasses import dataclass, field
 
 from .entropy import CrackTimes, calculate_entropy, estimate_crack_times

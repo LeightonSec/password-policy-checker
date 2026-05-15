@@ -26,7 +26,7 @@ def check_hibp(password: str) -> tuple[bool, int, str | None]:
         error_message is None on success.
     """
     # Compute SHA-1 — store locally only long enough to split
-    sha1_upper = hashlib.sha1(password.encode("utf-8")).hexdigest().upper()
+    sha1_upper = hashlib.sha1(password.encode("utf-8"), usedforsecurity=False).hexdigest().upper()  # nosec B324 nosemgrep: python.lang.security.insecure-hash-algorithms.insecure-hash-algorithm-sha1 — SHA-1 required by HIBP k-anonymity API, not a security primitive
     prefix = sha1_upper[:5]
     suffix = sha1_upper[5:]
     # Overwrite the full hash immediately — Python can't guarantee memory

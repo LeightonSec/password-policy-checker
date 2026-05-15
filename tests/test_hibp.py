@@ -8,7 +8,7 @@ from checker.hibp import check_hibp
 
 def _make_hibp_response(password: str, count: int = 5) -> str:
     """Build a fake HIBP response that includes the given password's hash suffix."""
-    sha1 = hashlib.sha1(password.encode()).hexdigest().upper()
+    sha1 = hashlib.sha1(password.encode(), usedforsecurity=False).hexdigest().upper()  # nosec B324 — building HIBP-compatible hash for test fixture
     suffix = sha1[5:]
     # Build a response with the target suffix plus some decoys
     lines = [
@@ -21,7 +21,7 @@ def _make_hibp_response(password: str, count: int = 5) -> str:
 
 def _make_clean_response(password: str) -> str:
     """Build a fake HIBP response that does NOT include the given password."""
-    sha1 = hashlib.sha1(password.encode()).hexdigest().upper()
+    sha1 = hashlib.sha1(password.encode(), usedforsecurity=False).hexdigest().upper()  # nosec B324 — building HIBP-compatible hash for test fixture
     sha1[5:]
     # Return a response with different suffixes
     return "AAAAABBBBBCCCCCDDDDDEEEEE:3\r\nFFFFFBBBBBCCCCCDDDDDEEEEE:7"
@@ -59,7 +59,7 @@ class TestCheckHIBP:
     def test_padding_entry_not_counted_as_breach(self):
         """Add-Padding entries with count=0 must not trigger a breach flag."""
         password = "test_padding_check"
-        sha1 = hashlib.sha1(password.encode()).hexdigest().upper()
+        sha1 = hashlib.sha1(password.encode(), usedforsecurity=False).hexdigest().upper()  # nosec B324 — building HIBP-compatible hash for test fixture
         suffix = sha1[5:]
         # Return the correct suffix but with count=0 (padding decoy)
         fake_body = f"{suffix}:0\r\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA:5"
@@ -99,7 +99,7 @@ class TestCheckHIBP:
     def test_only_prefix_sent_to_api(self):
         """Verify that only the 5-char prefix is included in the API URL, never the full hash."""
         password = "testpassword"
-        sha1 = hashlib.sha1(password.encode()).hexdigest().upper()
+        sha1 = hashlib.sha1(password.encode(), usedforsecurity=False).hexdigest().upper()  # nosec B324 — building HIBP-compatible hash for test fixture
         expected_prefix = sha1[:5]
 
         mock_response = MagicMock()
