@@ -29,14 +29,14 @@ def _make_clean_response(password: str) -> str:
 
 class TestCheckHIBP:
     def test_breached_password_detected(self):
-        password = "password"
-        fake_body = _make_hibp_response(password, count=3_500_000)
+        known_breached = "password"
+        fake_body = _make_hibp_response(known_breached, count=3_500_000)
         mock_response = MagicMock()
         mock_response.text = fake_body
         mock_response.raise_for_status = MagicMock()
 
         with patch("checker.hibp.httpx.get", return_value=mock_response):
-            is_breached, count, error = check_hibp(password)
+            is_breached, count, error = check_hibp(known_breached)
 
         assert is_breached is True
         assert count == 3_500_000
