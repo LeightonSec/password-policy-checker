@@ -35,7 +35,7 @@ def check_hibp(password: str) -> tuple[bool, int, str | None]:
     del sha1_upper
 
     try:
-        response = httpx.get(
+        response = httpx.get(  # gate: ignore — calls HIBP k-anonymity API by design, core tool function
             _HIBP_URL.format(prefix=prefix),
             timeout=_TIMEOUT_SECONDS,
             headers={

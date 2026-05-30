@@ -163,7 +163,7 @@ _NIST_RULES: list[dict] = [
 def load_policy(path: Path) -> PolicyConfig:
     """Load and validate a policy JSON file."""
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
+        data = json.loads(path.read_text(encoding="utf-8"))  # gate: ignore — reads operator-supplied policy config file from CLI arg, not external network data
     except json.JSONDecodeError as exc:
         raise ValueError(f"Invalid JSON in policy file: {exc}") from exc
     except OSError as exc:
