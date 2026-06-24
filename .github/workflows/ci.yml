@@ -74,3 +74,23 @@ jobs:
 
       - name: Audit dependencies
         run: pip-audit -r requirements.txt
+
+      # security-gate is pinned to a known-good commit, not a tag or @main.
+      # The gate is fast-moving; a SHA pin is reproducible and bumped
+      # deliberately. The v0.1.0 tag predates the gate's hardening (it shipped a
+      # vulnerable msgpack) and would propagate a toothless build forward, so
+      # pin the hardened HEAD instead.
+      - name: Install security-gate (pinned)
+        run: pip install "git+https://github.com/LeightonSec/security-gate.git@531d618231269b490fd2800484aee7e0feebca38"
+
+      - name: Run security-gate
+        # Real teeth: blocks on CRITICAL/HIGH. tests/ is excluded because test
+        # fixtures carry deliberate weak-password patterns by design.
+        run: security-gate scan . --exclude tests --output json --save
+
+      - name: Upload gate report
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: security-gate-report
+          path: security-gate-report.json
