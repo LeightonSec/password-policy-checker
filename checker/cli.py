@@ -76,7 +76,8 @@ def check(
 
     with console.status("Evaluating password...", spinner="dots"):
         result = evaluate_password(pw, check_hibp_api=not no_hibp)
-        pw = "0" * len(pw)
+        # Drop the reference so the plaintext is GC-eligible sooner. Not a
+        # secure wipe: CPython does not zero the string's memory on del.
         del pw
 
     print_password_evaluation(result)

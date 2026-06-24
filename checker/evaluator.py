@@ -14,7 +14,6 @@ from .patterns import detect_all_patterns
 class PasswordEvaluation:
     # Input metadata (never store the password itself)
     password_length: int
-    masked: str                        # e.g. "p*****d" for display
 
     # Character composition
     has_lowercase: bool
@@ -43,13 +42,6 @@ class PasswordEvaluation:
     score: int                          # 0–100
     rating: str                         # Very Weak / Weak / Fair / Good / Strong / Very Strong
     recommendations: list[str] = field(default_factory=list)
-
-
-def _mask(password: str) -> str:
-    """Return a display-safe masked version of the password."""
-    if len(password) <= 2:
-        return "*" * len(password)
-    return password[0] + "*" * (len(password) - 2) + password[-1]
 
 
 def _load_common_passwords() -> frozenset[str]:
@@ -220,13 +212,14 @@ def evaluate_password(password: str, check_hibp_api: bool = True) -> PasswordEva
         patterns, entropy,
     )
 
-    # Wipe sensitive reference before returning
-    password = "0" * length
+    # Drop the local reference so the plaintext becomes eligible for garbage
+    # collection sooner. This does NOT zero the string's memory — CPython
+    # strings are immutable and the bytes persist until GC reclaims them. It
+    # only shortens the exposure window; it is not a secure wipe.
     del password
 
     return PasswordEvaluation(
         password_length=length,
-        masked=_mask("*" * length),   # masked is constructed from length, not password
         has_lowercase=has_lowercase,
         has_uppercase=has_uppercase,
         has_digits=has_digits,

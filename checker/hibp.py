@@ -29,9 +29,9 @@ def check_hibp(password: str) -> tuple[bool, int, str | None]:
     sha1_upper = hashlib.sha1(password.encode("utf-8"), usedforsecurity=False).hexdigest().upper()  # nosec B324 nosemgrep: python.lang.security.insecure-hash-algorithms.insecure-hash-algorithm-sha1 — SHA-1 required by HIBP k-anonymity API, not a security primitive
     prefix = sha1_upper[:5]
     suffix = sha1_upper[5:]
-    # Overwrite the full hash immediately — Python can't guarantee memory
-    # erasure, but removing the reference reduces the exposure window.
-    sha1_upper = "0" * len(sha1_upper)
+    # Drop the full-hash reference once split into prefix/suffix. This makes it
+    # GC-eligible sooner; it does not zero memory (CPython strings are immutable
+    # and persist until reclaimed). Best-effort exposure reduction, not a wipe.
     del sha1_upper
 
     try:
