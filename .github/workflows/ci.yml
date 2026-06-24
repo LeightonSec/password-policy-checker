@@ -69,11 +69,16 @@ jobs:
         with:
           python-version: "3.12"
 
+      # pip-audit runs as an isolated tool, never a project dependency: an audit
+      # tool must not pollute the graph it audits. Dev deps are in scope because
+      # dev-only CVEs are still CVEs (a vulnerable msgpack once rode in through
+      # a sibling repo's audit-tool stack — never again). --strict fails on any
+      # advisory that cannot be resolved.
       - name: Install pip-audit
         run: pip install pip-audit
 
       - name: Audit dependencies
-        run: pip-audit -r requirements.txt
+        run: pip-audit -r requirements.txt -r requirements-dev.txt --strict
 
       # security-gate is pinned to a known-good commit, not a tag or @main.
       # The gate is fast-moving; a SHA pin is reproducible and bumped
