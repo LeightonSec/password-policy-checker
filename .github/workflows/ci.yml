@@ -52,8 +52,8 @@ jobs:
           python-version: "3.12"
           cache: pip
 
-      - name: Install ruff
-        run: pip install ruff>=0.4.0
+      - name: Install ruff (from hashed lockfile)
+        run: pip install --require-hashes -r requirements-dev.txt
 
       - name: Run ruff
         run: ruff check checker/ tests/
